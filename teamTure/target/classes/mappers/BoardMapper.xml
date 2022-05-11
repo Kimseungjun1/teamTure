@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="team.ture.mapper.boardMapper">
+	
+	 <select id="countBoard" resultType="int" >
+	 		SELECT COUNT(*) FROM BOARD	where delny='N' 
+	 		
+	 				<if test="bcheck != null and bcheck.equals('일반')">
+	 					and bcheck = '일반'
+	 				</if>
+	 				
+	 				<if test="bcheck != null and bcheck.equals('광고')">
+	 					and bcheck = '광고'
+	 				</if>
+	 				
+	 				<if test="sarchType != null and sarchType.equals('bsubject')">
+						and bsubject like concat('%',#{sarchValue},'%') 
+											    
+											          
+					</if>
+					<if test="sarchType != null and sarchType.equals('bwriter')">
+					    and bwriter like concat('%',#{sarchValue},'%')
+					</if>
+	 					 				
+	 </select>
+	
+	
+
+     <select id="listBoard" resultType="boardVO" parameterType="sarchVO">
+     
+         							
+         	SELECT bidx
+         				,bsubject
+         				,bcontent
+         				,bwriter
+         				,bwdate
+         				,midx
+         				,bcheck
+         									
+         		FROM BOARD
+         										
+         		WHERE delny != 'Y'
+				
+				<if test="sarchType != null and sarchType.equals('bsubject')">
+					and bsubject like concat('%',#{sarchValue},'%') 
+										    
+										          
+				</if>
+				<if test="sarchType != null and sarchType.equals('bwriter')">
+				    and bwriter like concat('%',#{sarchValue},'%')
+				</if>
+										          
+				order by bidx desc
+				
+				
+         										
+         										
+         		          
+    </select>
+    
+    <select id="selectBoard" resultType="boardVO" parameterType="pagingUtil">
+         
+		SELECT *
+								         											
+					FROM BOARD
+										
+					WHERE delny != 'Y'
+		          
+		          <if test="sarchType != null and sarchType.equals('bsubject')">
+		          and bsubject like concat('%', #{sarchValue}, '%')
+		          
+		          
+		          </if>
+		          <if test="sarchType != null and sarchType.equals('bwriter')">
+		          and bwriter like concat('%', #{sarchValue}, '%')
+		          </if> 
+		          
+		          <if test="bcheck != null and bcheck.equals('일반')">
+		          and bcheck = '일반'
+		          </if>
+		          
+		          <if test="bcheck != null and bcheck.equals('광고')">
+		          and bcheck = '광고'
+		          </if>
+          
+          			ORDER BY BIDX DESC 
+        
+         			 Limit #{start},#{perPage}
+										          
+										          
+         										
+         										
+         										
+         				
+       
+                                    
+          
+    </select>
+    
+    <select id="detailBoard" resultType="boardVO" parameterType="int">
+    	 SELECT bidx
+        	 , bsubject
+        	 , bcontent
+        	 , bwriter
+        	 , bwdate
+        	 , filename
+        	 , midx
+        	 , bcheck
+        	 
+          FROM board
+          WHERE bidx= #{bidx}
+          
+    </select>
+    
+    <update id="updateBoard" parameterType="boardVO">
+    	UPDATE board
+    	   SET bsubject = #{bsubject}
+    	       ,bcontent = #{bcontent}
+    	       ,filename = #{filename}
+    	       ,bcheck = #{bcheck}
+    	WHERE bidx = #{bidx} 
+    
+    </update>
+    
+    <update id="deleteBoard" parameterType="int">
+    	UPDATE board
+    	   SET delny = 'Y'
+    	WHERE bidx = #{bidx} 
+    	    
+    </update>
+    
+    <select id="checkBoard"  parameterType="int" resultType="boardVO">
+    	<![CDATA[
+    	SELECT bidx
+         		,bsubject
+         		,bcontent
+         		,bwriter
+         		,bwdate
+         		,midx
+         		,bcheck
+         	FROM board
+         	where 1=1
+         ]]>
+         	<if test="value eq 1 ">
+         		AND bcheck='광고'
+         	</if>
+         	<if  test="value eq 2 ">
+         		AND bcheck='일반'
+         	</if>
+         	
+         	<![CDATA[
+         	 
+         		AND delny = 'N'
+         	
+         		order by bidx desc
+         	]]>
+         	
+    
+    
+    </select>
+    
+    <insert id="insertBoard" parameterType="boardVO">
+    
+		<![CDATA[
+		INSERT INTO 
+					board(
+					 bsubject
+					,bcontent
+					,bwriter
+					,bwdate
+					,midx
+					,bcheck					
+					,filename
+					)
+			VALUES(
+					  #{bsubject}
+					, #{bcontent}
+					, #{bwriter}
+					,	now() 
+					, #{midx}
+					, #{bcheck}
+					, #{filename}
+					)
+		    	
+    	]]>
+    
+    
+    <selectKey resultType="integer" keyProperty="bidx" order="AFTER"> <!--order = AFTER BEFORE-->
+    	SELECT MAX(bidx) FROM board
+    </selectKey>
+        
+    </insert>
+    
+    <select  id="countMBoard" resultType="int">
+    
+    	SELECT COUNT(*) FROM BOARD WHERE delny ='N'
+    	
+    	and midx = #{midx}
+    
+    
+    </select>
+    
+    
+  
+    
+    
+   
+</mapper>

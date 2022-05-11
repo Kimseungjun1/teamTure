@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="team.ture.mapper.QnAMapper">
+	
+	<insert id="insertQna" parameterType="qnaVO">
+    
+		<![CDATA[
+		INSERT INTO 
+					qna(
+					 qsubject
+					,qcontent
+					,qwriter
+					,qwdate
+					,midx					
+					,qimg
+					,qcheck
+					)
+			VALUES(
+					  #{qsubject}
+					, #{qcontent}
+					, #{qwriter} 
+					,	now() 
+					, #{midx}
+					, #{qimg}
+					,#{qcheck}
+					)
+		    	
+    	]]>
+    
+    
+    <selectKey resultType="integer" keyProperty="qidx" order="AFTER"> <!--order = AFTER BEFORE-->
+    	SELECT MAX(qidx) FROM qna
+    </selectKey>
+        
+    </insert>
+    
+    <select id="countQna" resultType="int">
+	 		SELECT COUNT(*) FROM qna 
+	 		
+	 			WHERE delny = 'N'
+	 </select>
+    
+     <select id="listQna" resultType="qnaVO">
+     
+         							
+         	SELECT qidx
+         				,qsubject
+         				,qcontent
+         				,qwriter
+         				,qwdate
+         				,midx
+         				,qcheck
+         									
+         		FROM qna
+				
+				where delny = 'N'
+				
+				<if test="sarchType != null and sarchType.equals('qsubject')">
+					and qsubject like concat('%',#{sarchValue},'%') 
+										          
+										          
+				</if>
+				<if test="sarchType != null and sarchType.equals('qwriter')">
+				    and qwriter like concat('%',#{sarchValue},'%') 
+				</if>
+										          
+				order by qidx desc
+         										
+         										
+         		          
+    </select>
+    
+     
+    
+    <select id="detailQna" resultType="qnaVO" parameterType="int">
+    	 SELECT qidx
+        	 , qsubject
+        	 , qcontent
+        	 , qwriter
+        	 , qwdate
+        	 , qimg
+        	 , midx
+        	 , qcheck
+        	 
+          FROM qna
+          WHERE qidx= #{qidx}
+          
+    </select>
+    
+    <update id="updateQna" parameterType="qnaVO">
+    	UPDATE qna
+    	   SET qsubject = #{qsubject}
+    	       ,qcontent = #{qcontent}
+    	       ,qimg = #{qimg}
+    	       ,qcheck = #{qcheck}
+    	WHERE qidx = #{qidx} 
+    
+    </update>
+    
+   <update id="deleteQna">
+		UPDATE qna
+			
+		SET delny = 'Y'
+		
+	WHERE qidx = #{qidx}
+	</update>
+    
+     <select id="checkQna"  parameterType="int" resultType="qnaVO">
+    	<![CDATA[
+    	SELECT qidx
+         		,qsubject
+         		,qcontent
+         		,qwriter
+         		,qwdate
+         		,midx
+         		,qcheck
+         	FROM qna
+         	where delny='N'
+         ]]>
+         	<if test="value eq 1 ">
+         		AND qcheck='공지'
+         	</if>
+         	<if  test="value eq 2 ">
+         		AND qcheck='일반'
+         	</if>
+         	
+         	<![CDATA[
+         		order by qidx desc
+         	]]>
+         	
+    
+    
+    </select>
+   
+   <select id="selectBoard" resultType="qnaVO" parameterType="pagingUtil2">
+         
+		SELECT *
+								         											
+					FROM qna
+										
+					WHERE delny='N'
+		          
+		          <if test="sarchType != null and sarchType.equals('qsubject')">
+		          and qsubject like concat('%', #{sarchValue}, '%')
+		          
+		          
+		          </if>
+		          <if test="sarchType != null and sarchType.equals('qwriter')">
+		          and qwriter like concat('%', #{sarchValue}, '%')
+		          </if> 
+		          
+		          <if test="qcheck != null and qcheck.equals('일반')">
+		          and qcheck = '일반'
+		          </if>
+		          
+		          
+		          <if test="qcheck != null and qcheck.equals('공지')">
+		          and qcheck = '공지'
+		          </if>
+          
+          			ORDER BY QIDX DESC 
+        
+         			 Limit #{start2},#{perPage2}
+										                          
+          
+    </select>
+    
+    <select id="countBoard" resultType="int">
+	 		SELECT COUNT(*) FROM qna	where delny='N' 
+	 		
+	 				<if test="qcheck != null and qcheck.equals('일반')">
+	 					and qcheck = '일반'
+	 				</if>
+	 				
+	 				<if test="qcheck != null and qcheck.equals('공지')">
+	 					and qcheck = '공지'
+	 				</if>
+	 				
+	 				<if test="sarchType != null and sarchType.equals('qsubject')">
+						and qsubject like concat('%',#{sarchValue},'%') 
+											    
+											          
+					</if>
+					<if test="sarchType != null and sarchType.equals('qwriter')">
+					    and qwriter like concat('%',#{sarchValue},'%')
+					</if>
+	 					 				
+	 </select>
+	 
+	 <select id="countQBoard" resultType="int">
+	 		SELECT COUNT(*) FROM qna	where delny='N' 
+	 		
+	 				and midx = #{midx}
+	 					 				
+	 </select>
+</mapper>

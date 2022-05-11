@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="team.ture.mapper.locationMapper">
+	
+	<select id="listTspot" resultType="tspotVO">
+	
+		SELECT tidx 
+			, tsubject
+			, tcontent
+			, timg
+			, timg1
+			, timg2
+			, region
+			, tag
+			, delny
+			, astar
+			
+		 FROM TSPOT
+		 
+		 where delny != 'Y'
+		  <if test="sarchType != null and sarchType.equals('tsubject')">
+          and tsubject like '%'||#{sarchValue}||'%' 
+          
+          </if>
+          
+          <if test="sarchType != null and sarchType.equals('tag')">
+          
+          and tcontent like '%'||#{sarchValue}||'%'
+          
+          </if>
+          
+		 order by tidx desc
+	
+	</select>
+	
+	<select id="listTspotB" resultType="tspotVO">
+	
+		SELECT tidx
+				,tsubject
+				,tcontent
+				,timg
+				,timg1
+				,timg2
+				,region
+				,tag
+				,delny
+				,astar
+				
+			FROM TSPOT
+			
+			WHERE lidx = #{lidx}
+				
+	</select>
+	
+	<!-- 별점 업데이트  -->
+	
+	<update id="TreplyStarUp" parameterType="treplyVO">
+	
+		UPDATE TSPOT
+		
+			SET Astar = #{star}
+			
+			WHERE tidx = #{tidx}
+	
+	</update>
+	
+	<update id="deleteTspot"  parameterType="int">
+		UPDATE tspot
+		
+		 SET delny = 'Y'
+		
+		WHERE tidx = #{tidx}
+	
+	
+	
+	</update>
+	
+	<select id="detailTspot" resultType="tspotVO" parameterType="int">
+		SELECT Tidx
+			, tsubject
+			, tcontent
+			, timg
+			, timg1
+			, timg2
+			, tag
+			, region
+			, delny
+			, lidx
+			, astar
+			
+		FROM TSPOT
+		WHERE tidx=#{tidx}
+	
+	
+	</select>
+	
+	<select id="checkTspot" parameterType="String" resultType="tspotVO">
+	
+		<![CDATA[
+		
+				SELECT tidx 
+					, tsubject
+					, tcontent
+					, timg
+					, timg1
+					, timg2
+					, region
+					, tag
+					, delny
+					
+				FROM TSPOT
+				where 1=1
+		]]>
+		
+		<if test="value eq 1">
+			AND region = '고창군'
+		</if>		
+		<if test="value eq 2">
+			AND region = '군산시'
+		</if>
+		<if test="value eq 3">
+			AND region = '김제시'
+		</if>
+		<if test="value eq 4">
+			AND region = '남원시'
+		</if>
+		<if test="value eq 5">
+			AND region = '무주군'
+		</if>
+		<if test="value eq 6">
+			AND region = '부안군'
+		</if>
+		<if test="value eq 7">
+			AND region = '순창군'
+		</if>
+		<if test="value eq 8">
+			AND region = '완주군'
+		</if>
+		<if test="value eq 9">
+			AND region = '익산시'
+		</if>
+		<if test="value eq 10">
+			AND region = '임실군'
+		</if>
+		<if test="value eq 11">
+			AND region = '장수군'
+		</if>
+		<if test="value eq 12">
+			AND region = '전주시'
+		</if>
+		<if test="value eq 13">
+			AND region = '정읍시'
+		</if>
+		<if test="value eq 14">
+			AND region = '진안군'
+		</if>
+		<if test="value eq 15">
+			AND region = '타 지역'
+		</if>
+		<if test="value eq 16">
+			AND 2=2
+		</if>
+		
+		
+		
+		
+		<![CDATA[
+		order by tidx desc
+		]]>
+	
+	</select>
+	
+	<update id="updateTspot" parameterType="tspotVO">
+    	UPDATE tspot
+    	   SET tsubject = #{tsubject}
+    	       ,tcontent = #{tcontent}
+    	       ,timg = #{timg}
+    	       ,timg1 = #{timg1}
+    	       ,timg2 = #{timg2}
+    	       ,lidx = #{lidx}
+    	       ,region = #{region}
+    	       
+    	       
+    	WHERE tidx = #{tidx} 
+    
+    </update>
+	
+	<insert id="insertTspot" parameterType="tspotVO">
+		<![CDATA[
+		INSERT INTO 
+					tspot(
+					
+					
+					 tsubject
+					,tcontent
+					,timg
+					,timg1
+					,timg2
+					,lidx
+					,tag
+					,region
+					
+					)
+					
+			VALUES(
+					 
+					   #{tsubject}
+					 , #{tcontent}
+					 , #{timg}
+					 , #{timg1}
+					 , #{timg2}
+					 , #{lidx}
+					 , #{tag}
+					 , #{region}
+					 )
+		]]>	 
+				
+					
+		
+	<selectKey resultType="integer" keyProperty="tidx" order="AFTER"><!--order = AFTER BEFORE-->
+		SELECT MAX(tidx) FROM tspot
+	</selectKey>
+		
+	
+	</insert>
+	
+</mapper>

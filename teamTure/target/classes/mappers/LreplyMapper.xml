@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="team.ture.mapper.lreplyMapper">
+  
+  	<select id="countLreply" resultType="int">
+  		SELECT COUNT(*) FROM lctreply 
+  		
+  				WHERE lidx = #{lidx}
+  	
+  	
+  	</select>
+  	
+  	<select id="selectLreply" resultType="LreplyVO">
+  		
+  		SELECT * 
+  					FROM lctreply
+  					  					
+  					where lidx = #{lidx}
+  					
+  					ORDER BY LRIDX DESC
+  					
+  					LIMIT #{start},#{perPage}
+  	
+  	
+  	</select>
+  
+  	<select id="LreplyList" resultType="LreplyVO">
+  		
+  		SELECT 
+  				LRWRITER
+  				,LRCONTENT
+  				,lRWDATE
+  				,IMG
+  				,lridx
+  				,lidx
+  				,midx
+  				,region
+  				,star
+  				
+  				FROM lctreply
+  				
+  				
+  				
+  				ORDER BY lridx DESC
+  	
+  	
+  	
+  	</select>
+  	
+  	<select id="LreplyStar" resultType="LreplyVO" parameterType="int">
+  	
+  		SELECT	
+  				TRUNCATE(SUM(STAR)/COUNT(*),1) 'star'
+  				
+  			FROM LCTREPLY 
+  			
+  				WHERE 	LIDX= #{lidx} 
+  			
+  	
+  	</select>
+  	
+  	<select id="detailLreply" resultType="lreplyVO" parameterType="int">
+  	
+  		SELECT 
+  				lridx
+  				, lrwriter
+  				, lrcontent
+  				, lrwdate
+  				, img
+  				, region
+  				, lidx
+  				, midx
+  				, star
+  				
+  			FROM lctreply
+  			
+  			
+  			where lridx = #{lridx}
+  			
+  			
+  			  		
+  	
+  	
+  	
+  	</select>
+  	
+  	<update id="updateLreply" parameterType="lreplyVO">
+  		
+  		UPDATE LCTREPLY
+  		   SET lrcontent = #{lrcontent}
+  			  ,lrwdate = now()
+  			  ,img = #{img}
+  			  , star = #{star}
+  			  
+  		WHERE lridx = #{lridx}
+  	
+  	
+  	</update>
+  	
+  	<delete id="deleteLreply" parameterType="int">
+  	 
+  	 	delete FROM  	 			
+  	 	
+  	 			LCTREPLY
+  	 	  	 		 		
+  	 			
+  	 		WHERE lridx = #{lridx}
+  	 
+  	</delete>
+  	
+  	
+  	<insert id="insertLreply" parameterType="lreplyVO" >
+  	
+  		<![CDATA[
+		INSERT INTO 
+					LCTREPLY(
+					
+					lrcontent
+					, lrwriter
+					, lrwdate
+					, lidx
+					, midx
+					, img
+					, region
+					, star
+					
+					)
+					
+			VALUES(
+					 
+					 #{lrcontent}
+					 , #{lrwriter}
+					 , now()
+					 , #{lidx}
+					 , #{midx}
+					 , #{img}
+					 , #{region}
+					 , #{star}
+					 
+					 )
+		]]>	 
+				
+					
+		
+	<selectKey resultType="integer" keyProperty="lridx" order="AFTER"><!--order = AFTER BEFORE-->
+		SELECT MAX(lridx) FROM LCTREPLY
+  	</selectKey>
+  	
+  	
+  	</insert>
+  
+  
+  
+  </mapper>

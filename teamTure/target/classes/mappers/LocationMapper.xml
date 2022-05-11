@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="team.ture.mapper.locationMapper">
+	
+	<select id="listLocation" resultType="locationVO">
+	
+		SELECT lidx 
+			, lregion
+			, lcontent
+			
+			
+		 FROM LCT
+	
+	</select>
+	
+	<select id="detailLocation" resultType="locationVO" parameterType="int">
+    	 SELECT lidx
+        	 , lregion
+        	 , lcontent
+        	 , latitude
+        	 , longitude
+        	 
+        	 
+          FROM LCT
+          WHERE lidx= #{lidx}
+          
+    </select>
+    
+    <update id="updateLocation" parameterType="locationVO">
+    	UPDATE lct
+    	   SET lcontent = #{lcontent}
+    	       
+    	WHERE lidx = #{lidx} 
+    
+    </update>
+	
+</mapper>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="team.ture.mapper.memberMapper">
+
+ <select id="memberList" resultType="memberVO" parameterType="pagingUtil">
+  SELECT mname,mid,midx,mnic,mphone,maddr,mbirth,memail,grade
+  FROM member
+  
+  where 1=1
+  				
+  					<if test="sarchType != null and sarchType.equals('mid')">
+						and mid like concat('%',#{sarchValue},'%') 
+											    
+											          
+					</if>
+					<if test="sarchType != null and sarchType.equals('mname')">
+					    and mname like concat('%',#{sarchValue},'%')
+					</if>
+  		
+  order by midx
+  Limit #{start},#{perPage}
+ </select>
+
+<select id="countList" resultType="int">
+	 		SELECT COUNT(*) FROM member	 
+</select>
+<insert id="insertMember" parameterType="memberVO" useGeneratedKeys="true" keyProperty="midx">
+
+	insert into member(mid,mpwd,mname,mnic,mphone,maddr,mbirth,memail)
+	values(
+	#{mid},
+	#{mpwd},
+	#{mname},
+	#{mnic, jdbcType=VARCHAR},
+	#{mphone, jdbcType=INTEGER},
+	#{maddr, jdbcType=VARCHAR},
+	#{mbirth, jdbcType=INTEGER},
+	#{memail})
+</insert>
+
+
+ <select id="loginCheck" parameterType="memberVO"  resultType="memberVO">
+  select *
+  from member
+  where mid=#{mid} and mpwd=#{mpwd}
+ </select>
+ 
+<select id="idChk" resultType="int" parameterType="memberVO">
+ SELECT COUNT(*) FROM member
+	WHERE mid = #{mid}
+ </select>
+ 
+
+ 
+ <select id="nicChk" resultType="int" parameterType="memberVO">
+ SELECT COUNT(*) FROM member
+	WHERE mnic = #{mnic}
+ </select>
+ 
+ <update id="updateImg" parameterType="memberVO">
+	update member set mimg = #{mimg} where midx = #{midx}
+ </update>
+
+ <select id="detailMember" resultType="memberVO" parameterType="int">
+    	 SELECT midx
+    	 	 , mid
+        	 , mname
+        	 , mnic
+        	 , mphone
+        	 , maddr
+        	 , memail
+        	 , mimg
+        	 , grade
+        	 
+          FROM member
+          WHERE midx= #{midx}
+          
+    </select>
+    
+    <select id="detailMemberP" resultType="memberVO" parameterType="String">
+    	 SELECT 
+    	 	 mid
+        	,memail 
+          FROM member
+          WHERE mid= #{mid}
+          
+    </select>
+    
+ <select id="findId" resultType="memberVO">
+	select * from member where memail = #{memail}
+</select>
+
+<select id="findIdCheck" resultType="int">
+	select count(*) from member where memail = #{memail}
+</select>
+
+<select id="findPwd" resultType="memberVO">
+	select * from member where memail = #{memail} and mid=#{mid}
+</select>
+
+<select id="findPwdCheck" resultType="int">
+	select count(*) from member where memail = #{memail} and mid=#{mid}
+</select>
+
+ <update id="updateMember" parameterType="memberVO">
+	update member set 
+	mnic = #{mnic, jdbcType=VARCHAR},
+	mphone = #{mphone, jdbcType=INTEGER},
+	maddr = #{maddr, jdbcType=VARCHAR},
+	memail = #{memail}
+	where midx = #{midx}
+ </update>
+
+<update id="memberDelete">
+
+	UPDATE member
+		
+		set delny = 'Y'
+		
+		where mid = #{mid}
+		
+		AND mpwd = #{mpwd}
+		
+	 
+</update>
+
+ <select id="countMyBoard" resultType="memberVO" >
+	 		select 
+	 				bsubject,bidx 
+	 			
+	 			from member 
+	 			
+	 				inner join 
+	 			
+	 				board on 
+	 			
+	 			member.midx=#{midx} 
+	 			and board.midx=#{midx} 
+	 			
+	 			where board.delny='N' 
+	 			
+	 			
+	 			LIMIT #{start},#{perPage}
+	 			
+	 			
+	 		
+ </select>
+ 
+ <select id="countMyQna" resultType="memberVO" parameterType="int">
+	 		select 
+	 				qsubject,qidx 
+	 			
+	 			from member 
+	 			
+	 				inner join 
+	 			
+	 				qna on 
+	 			
+	 			member.midx=#{midx} 
+	 			and qna.midx=#{midx} 
+	 			
+	 			where 1=1
+	 			
+	 			
+	 			LIMIT #{start2},#{perPage2}	 
+ </select>
+ 
+ <update id="updateGrade" parameterType="memberVO">
+	update member set 
+	grade = #{grade}
+	where midx = #{midx}
+ </update>
+ 
+ <select id="pwCheck" resultType="memberVO" parameterType="int">
+select mpwd from member where mid = #{mid}
+</select>
+
+<update id="pwUpdate" parameterType="memberVO">
+update member set mpwd = #{mpwd} where midx = #{midx}
+</update>
+
+<update id="updatePw" >
+	update member set mpwd = #{mpwd} where mid = #{mid}
+</update>
+
+
+</mapper>

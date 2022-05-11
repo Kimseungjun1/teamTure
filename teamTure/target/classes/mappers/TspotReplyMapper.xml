@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="team.ture.mapper.locationMapper">
+  
+  	<select id="countTreply" resultType="int">
+  		SELECT COUNT(*) FROM TSPOTREPLY
+  		
+  			WHERE tidx = #{tidx}
+  		
+  	</select>
+  	
+  	<select id="selectTreply" resultType="treplyVO">
+  	
+  		SELECT * 
+  				FROM tspotreply
+  				
+  				WHERE tidx = #{tidx}
+  				
+  				ORDER BY tridx DESC
+  				
+  				LIMIT #{start},#{perPage}
+  	
+  	
+  	</select>
+  	
+  	<select id="TreplyStar" resultType="treplyVO" parameterType="int">
+  	
+  		SELECT
+  				
+  				TRUNCATE(SUM(STAR)/COUNT(*),1) 'star'
+  			
+  			FROM tspotreply
+  			
+  			WHERE tidx = #{tidx}
+  	
+  	
+  	</select>
+  
+  	<select id="listTreply" resultType="treplyVO">
+  		
+  		SELECT tridx
+  			, trwriter
+  			, trcontent
+  			, trwdate
+  			, lidx
+  			, tidx
+  			, midx
+  			, img
+  			, star
+  			
+  			
+  		FROM TSPOTREPLY
+  		
+  		order by tridx desc
+  	  	  	
+  	
+  	
+  	</select>
+  	
+  	<select id="detailTreply" resultType="treplyVO" parameterType="int">
+  	
+  		SELECT 
+  				tridx
+  				, trwriter
+  				, trcontent
+  				, trwdate
+  				, img
+  				, lidx
+  				, tidx
+  				, midx
+  				, star
+  				
+  				
+  		FROM TSPOTREPLY
+  		
+  		where tridx = #{tridx}
+  	
+  	
+  	</select>
+  	
+  	<update id="updateReply" parameterType="treplyVO">
+  	
+  		UPDATE TSPOTREPLY
+  		
+  			SET trcontent = #{trcontent}
+  				,trwdate = now()
+  				,img = #{img}
+  				,star = #{star}
+  				
+  		WHERE tridx = #{tridx}
+  	
+  	
+  	</update>
+  	
+  	<delete id="deleteReply" parameterType="int">
+  	
+  		DELETE FROM
+  		
+  				TSPOTREPLY
+  				
+  			WHERE tridx = #{tridx}
+  	
+  	
+  	
+  	
+  	</delete>
+  	
+  	
+  	
+  	<insert id="insertTreply" parameterType="treplyVO" >
+  	
+  		<![CDATA[
+		INSERT INTO 
+					tspotreply(
+					
+					trcontent
+					, trwriter
+					, trwdate
+					, lidx
+					, tidx
+					, midx
+					, img
+					, star
+					)
+					
+			VALUES(
+					 
+					 #{trcontent}
+					 , #{trwriter}
+					 , now()
+					 , #{lidx}
+					 , #{tidx}
+					 , #{midx}
+					 , #{img}
+					 , #{star}
+					 )
+		]]>	 
+				
+					
+		
+	<selectKey resultType="integer" keyProperty="tridx" order="AFTER"><!--order = AFTER BEFORE-->
+		SELECT MAX(tridx) FROM TSPOTREPLY
+  	</selectKey>
+  	
+  	
+  	</insert>
+  
+  
+  
+  </mapper>

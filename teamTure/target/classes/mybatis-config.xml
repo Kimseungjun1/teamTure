@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0/EN"
+				"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+		<!-- Mapper resultType=""의 내용 -->
+        <typeAlias type="team.ture.vo.BoardVO" alias="boardVO"/>
+        <typeAlias type="team.ture.vo.LocationVO" alias="locationVO"/>
+        <typeAlias type="team.ture.vo.TspotVO" alias="tspotVO"/>
+        <typeAlias type="team.ture.vo.SarchVO" alias="sarchVO"/>
+        <typeAlias type="team.ture.vo.TreplyVO" alias="treplyVO"/>
+        <typeAlias type="team.ture.vo.MemberVO" alias="memberVO"/>
+        <typeAlias type="team.ture.vo.BreplyVO" alias="breplyVO"/>
+        <typeAlias type="team.ture.vo.LreplyVO" alias="LreplyVO"/>
+        <typeAlias type="team.ture.vo.QnAVO" alias="qnaVO"/>
+        <typeAlias type="team.ture.vo.QreplyVO" alias="qreplyVO"/>
+        <typeAlias type="team.ture.vo.MaincVO" alias="maincVO"/>
+        <typeAlias type="team.ture.vo.SearchVO" alias="searchVO" /> 
+  		<typeAlias type="team.ture.vo.CalVO" alias="calVO" /> 
+  		<typeAlias type="team.ture.util.PagingUtil" alias="pagingUtil"/>
+  		<typeAlias type="team.ture.util.PagingUtil2" alias="pagingUtil2"/>
+        
+    </typeAliases>
+    
+	    
+
+</configuration>
+
+
+

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="team.ture.mapper.maincMapper">
+	
+	<select id="listMainc" resultType="maincVO">
+	
+		SELECT mainidx
+    	 		, img
+    	 		, img1
+    	 		, img2
+			
+		 FROM MAINC
+		 
+		 where 1 = 1
+		  
+          
+		 order by mainidx desc
+	
+	</select>
+    
+    <select id="detailMainc" resultType="maincVO" parameterType="int">
+    	 SELECT 
+    	 		mainidx
+    	 		, img
+    	 		, img1
+    	 		, img2
+    	 		
+    	 		
+        	 
+          FROM MAINC
+          WHERE mainidx= #{mainidx}
+          
+    </select>
+    
+    <update id="updateMainc" parameterType="maincVO">
+    	UPDATE MAINC
+    	   SET img = #{img}
+    	       ,img1 = #{img1}
+    	       ,img2 = #{img2}
+    	       
+    	WHERE mainidx = #{mainidx} 
+    
+    </update>
+    
+   
+    
+    
+  
+    
+    
+   
+</mapper>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="team.ture.mapper.breplyMapper">
+  
+  	<select id="breplyList" resultType="breplyVO">
+  		
+  		SELECT 
+  				BRWRITER
+  				,BRCONTENT
+  				,BRWDATE
+  				,IMG
+  				,DELNY
+  				,bidx
+  				,bridx
+  				,midx
+  				
+  				FROM BREPLY
+  				
+  				WHERE delny != 'Y'
+  				
+  				ORDER BY BRIDX DESC
+  	
+  	
+  	
+  	</select>
+  	
+  	<select id="detailBreply" resultType="breplyVO" parameterType="int">
+  	
+  		SELECT 
+  				bridx
+  				, brwriter
+  				, brcontent
+  				, brwdate
+  				, img
+  				, delny
+  				, bidx
+  				, midx
+  				
+  			FROM BREPLY
+  			
+  			
+  			where bridx = #{bridx}
+  			
+  			
+  			  		
+  	
+  	
+  	
+  	</select>
+  	
+  	<update id="updateReply" parameterType="breplyVO">
+  		
+  		UPDATE BREPLY
+  		   SET brcontent = #{brcontent}
+  			  ,brwdate = now()
+  			  ,img = #{img}
+  			  
+  		WHERE bridx = #{bridx}
+  	
+  	
+  	</update>
+  	
+  	<delete id="deleteReply" parameterType="int">
+  	 
+  	 	delete FROM  	 			
+  	 	
+  	 			BREPLY
+  	 	  	 		 		
+  	 			
+  	 		WHERE bridx = #{bridx}
+  	 
+  	</delete>
+  	
+  	
+  	<insert id="insertBreply" parameterType="treplyVO" >
+  	
+  		<![CDATA[
+		INSERT INTO 
+					breply(
+					
+					brcontent
+					, brwriter
+					, brwdate
+					, bidx
+					, midx
+					, img
+					
+					)
+					
+			VALUES(
+					 
+					 #{brcontent}
+					 , #{brwriter}
+					 , now()
+					 , #{bidx}
+					 , #{midx}
+					 , #{img}
+					 )
+		]]>	 
+				
+					
+		
+	<selectKey resultType="integer" keyProperty="bridx" order="AFTER"><!--order = AFTER BEFORE-->
+		SELECT MAX(bridx) FROM BREPLY
+  	</selectKey>
+  	
+  	
+  	</insert>
+  
+  
+  
+  </mapper>

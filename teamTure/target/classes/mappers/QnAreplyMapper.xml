@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="team.ture.mapper.qreplyMapper">
+  
+  	<select id="qreplyList" resultType="qreplyVO">
+  		
+  		SELECT 
+  				QRWRITER
+  				,QRCONTENT
+  				,QRWDATE
+  				,qidx
+  				,qridx
+  				,midx
+  				,qrimg
+  				
+  				FROM qnareply
+  				
+  				ORDER BY QRIDX DESC
+  	
+  	
+  	
+  	</select>
+  	
+  	<select id="detailQreply" resultType="qreplyVO" parameterType="int">
+  	
+  		SELECT 
+  				qridx
+  				, qrwriter
+  				, qrcontent
+  				, qrwdate
+  				, qidx
+  				, midx
+  				, qrimg
+  				
+  			FROM qnareply
+  			
+  			
+  			where qridx = #{qridx}
+  			
+  			
+  			  		
+  	
+  	
+  	
+  	</select>
+  	
+  	<update id="updateReply" parameterType="qreplyVO">
+  		
+  		UPDATE qnareply
+  		   SET qrcontent = #{qrcontent}
+  			  ,qrwdate = now()
+  			  ,qrimg = #{qrimg}
+  			  
+  		WHERE qridx = #{qridx}
+  	
+  	
+  	</update>
+  	
+  	<delete id="deleteReply" parameterType="int">
+  	 
+  	 	delete FROM  	 			
+  	 	
+  	 			qnareply
+  	 	  	 		 		
+  	 			
+  	 		WHERE qridx = #{qridx}
+  	 
+  	</delete>
+  	
+  	
+  	<insert id="insertQreply" parameterType="qreplyVO" >
+  	
+  		<![CDATA[
+		INSERT INTO 
+					qnareply(
+					
+					qrcontent
+					, qrwriter
+					, qrwdate
+					, qidx
+					, midx
+					, qrimg
+					
+					)
+					
+			VALUES(
+					 
+					 #{qrcontent}
+					 , #{qrwriter}
+					 , now()
+					 , #{qidx}
+					 , #{midx}
+					 , #{qrimg}
+					 )
+		]]>	 
+				
+					
+		
+	<selectKey resultType="integer" keyProperty="qridx" order="AFTER"><!--order = AFTER BEFORE-->
+		SELECT MAX(qridx) FROM qnareply
+  	</selectKey>
+  	
+  	
+  	</insert>
+  
+  
+   <select id="countBoard" resultType="int">
+	 		SELECT COUNT(*) FROM qnareply	where 1=1 
+	 				 				
+	 </select>
+    <select id="selectBoard" resultType="qreplyVO">
+         
+		SELECT *
+								         											
+					FROM qnareply
+										
+					WHERE 1=1
+		          
+		        
+		         
+          			ORDER BY QRIDX DESC 
+        
+         			 Limit #{start2},#{perPage2}
+										                          
+          
+    </select>
+  
+  </mapper>
